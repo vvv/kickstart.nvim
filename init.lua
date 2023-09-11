@@ -148,6 +148,14 @@ require('lazy').setup({
     priority = 1000,
     config = function()
       vim.cmd.colorscheme 'onedark'
+      require('onedark').setup {
+        -- Keybind to toggle theme style. Leave it `nil` to disable,
+        -- or set to a string, for example "leader<ts>"
+        toggle_style_key = '<leader>ts',
+        -- List of styles to toggle between
+        toggle_style_list = { 'light', 'dark' },
+      }
+      require('onedark').load()
     end,
   },
 
@@ -212,7 +220,7 @@ require('lazy').setup({
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
-  -- require 'kickstart.plugins.autoformat',
+  require 'kickstart.plugins.autoformat',
   -- require 'kickstart.plugins.debug',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
@@ -221,7 +229,7 @@ require('lazy').setup({
   --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {})
 
 -- [[ Setting options ]]
@@ -230,9 +238,6 @@ require('lazy').setup({
 
 -- Set highlight on search
 vim.o.hlsearch = false
-
--- Make line numbers default
-vim.wo.number = true
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
@@ -261,6 +266,11 @@ vim.o.timeoutlen = 300
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
+
+-- Allow windows to be "squashed" (e.g., by `Ctrl-w _`) to zero lines
+vim.o.winminheight = 0
+-- Allow windows to be "squashed" (e.g., by `Ctrl-w |`) to zero columns
+vim.o.winminwidth = 0
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
@@ -395,6 +405,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
+--  See `:help lsp.txt`
 local on_attach = function(_, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
   -- to define small helper and utility functions so you don't have to repeat yourself
@@ -410,6 +421,7 @@ local on_attach = function(_, bufnr)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
+  -- See `:help vim.lsp.*` for documentation of any of the functions below
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
@@ -448,9 +460,9 @@ end
 --  define the property 'filetypes' to the map in question.
 local servers = {
   -- clangd = {},
-  -- gopls = {},
-  -- pyright = {},
-  -- rust_analyzer = {},
+  gopls = {},
+  pyright = {},
+  rust_analyzer = {},
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
 
@@ -511,7 +523,12 @@ cmp.setup {
       select = true,
     },
     ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
+      -- GitHub Copilot configuration.
+      -- Adopted from https://mactep.github.io/neovim/2022/07/01/neovim-cmp-copilot-tab.html
+      local copilot_keys = vim.fn['copilot#Accept']()
+      if copilot_keys ~= '' and type(copilot_keys) == 'string' then
+        vim.api.nvim_feedkeys(copilot_keys, 'n', true)
+      elseif cmp.visible() then
         cmp.select_next_item()
       elseif luasnip.expand_or_locally_jumpable() then
         luasnip.expand_or_jump()
