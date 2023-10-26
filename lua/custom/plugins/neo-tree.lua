@@ -15,7 +15,7 @@ return {
   },
   config = function()
     require('neo-tree').setup {}
-    vim.keymap.set('n', '<leader>t', function()
+    vim.keymap.set('n', '<leader>T', function()
       local m = require('neo-tree.command')
       m.execute { toggle = true, source = 'filesystem', reveal = true }
     end, { desc = 'Toggle Filesystem [T]ree' })
