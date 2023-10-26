@@ -459,7 +459,7 @@ local on_attach = function(_, bufnr)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
 
-  nmap('<leader>cf', wim.lsp.buf.format, '[C]ode [F]ormat')
+  nmap('<leader>cf', vim.lsp.buf.format, '[C]ode [F]ormat')
 end
 
 -- document existing key chains
