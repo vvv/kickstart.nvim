@@ -413,6 +413,24 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnos
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
+-- XXX <<<<<<<
+-- XXX-TODO: Print information message in the status line (or however it is called).
+-- See also https://github.com/LazyVim/LazyVim/blob/a184fc1c732e16b10ed0bb19f8e9789b2b20b71a/lua/lazyvim/util/init.lua#L203-L213
+
+local diagnostics_enabled = true
+
+function _G.toggle_diagnostics()
+  if diagnostics_enabled then
+    vim.diagnostic.disable(0)
+  else
+    vim.diagnostic.enable(0)
+  end
+  diagnostics_enabled = not diagnostics_enabled
+end
+
+vim.keymap.set('n', '<leader>td', _G.toggle_diagnostics, { desc = 'Toggle diagnostics' })
+-- XXX >>>>>>>
+
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
 --  See `:help lsp.txt`
