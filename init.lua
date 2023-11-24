@@ -158,6 +158,14 @@ require('lazy').setup({
     priority = 1000,
     config = function()
       vim.cmd.colorscheme 'onedark'
+      require('onedark').setup{
+        -- Keybind to toggle theme style. Leave it `nil` to disable it,
+        -- or set it to a string, for example "<leader>ts"
+        toggle_style_key = '<leader>ts',
+        -- List of styles to toggle between.
+        toggle_style_list = {'light', 'dark'},
+      }
+      require('onedark').load()
     end,
   },
 
@@ -229,7 +237,7 @@ require('lazy').setup({
   --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {})
 
 -- [[ Setting options ]]
@@ -240,7 +248,7 @@ require('lazy').setup({
 vim.o.hlsearch = false
 
 -- Make line numbers default
-vim.wo.number = true
+--vim.wo.number = true
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
@@ -273,6 +281,9 @@ vim.o.completeopt = 'menuone,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
+-- Let `CTRL-W _` squash windows to zero lines
+vim.o.winminheight = 0
+
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -288,6 +299,24 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous dia
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
+
+-- XXX <<<<<<<
+-- XXX-TODO: Print information message in the status line (or however it is called).
+-- See also https://github.com/LazyVim/LazyVim/blob/a184fc1c732e16b10ed0bb19f8e9789b2b20b71a/lua/lazyvim/util/init.lua#L203-L213
+
+local diagnostics_enabled = true
+
+function _G.toggle_diagnostics()
+  if diagnostics_enabled then
+    vim.diagnostic.disable(0)
+  else
+    vim.diagnostic.enable(0)
+  end
+  diagnostics_enabled = not diagnostics_enabled
+end
+
+vim.keymap.set('n', '<leader>td', _G.toggle_diagnostics, { desc = 'Toggle diagnostics' })
+-- XXX >>>>>>>
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -443,6 +472,7 @@ end, 0)
 
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
+--  See `:help lsp.txt`
 local on_attach = function(_, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
   -- to define small helper and utility functions so you don't have to repeat yourself
@@ -458,6 +488,7 @@ local on_attach = function(_, bufnr)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
+  -- See `:help vim.lsp.*` for documentation
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
@@ -484,6 +515,8 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
+
+  nmap('<leader>cf', vim.lsp.buf.format, '[C]ode [F]ormat')
 end
 
 -- document existing key chains
@@ -513,8 +546,8 @@ require('mason-lspconfig').setup()
 local servers = {
   -- clangd = {},
   -- gopls = {},
-  -- pyright = {},
-  -- rust_analyzer = {},
+  pyright = {},
+  rust_analyzer = {},
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
 
