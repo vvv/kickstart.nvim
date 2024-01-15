@@ -300,6 +300,9 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnos
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
+vim.keymap.set('n', '<leader>tn', ':lua vim.wo.number = not vim.wo.number<CR>', { desc = 'Toggle line numbering' },
+  { silent = true })
+
 -- XXX <<<<<<<
 -- XXX-TODO: Print information message in the status line (or however it is called).
 -- See also https://github.com/LazyVim/LazyVim/blob/a184fc1c732e16b10ed0bb19f8e9789b2b20b71a/lua/lazyvim/util/init.lua#L203-L213
@@ -527,6 +530,7 @@ require('which-key').register {
   ['<leader>h'] = { name = 'More git', _ = 'which_key_ignore' },
   ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
   ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
+  ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
   ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
 }
 
