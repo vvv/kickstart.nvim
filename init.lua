@@ -337,8 +337,8 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnos
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
-vim.keymap.set('n', '<leader>tn', ':lua vim.wo.number = not vim.wo.number<CR>', { desc = 'Toggle line numbering' },
-  { silent = true })
+vim.keymap.set('n', '<leader>tn', ':lua vim.wo.number = not vim.wo.number<CR>',
+  { desc = 'Toggle line numbering', silent = true })
 
 -- XXX <<<<<<<
 -- XXX-TODO: Print information message in the status line (or however it is called).
