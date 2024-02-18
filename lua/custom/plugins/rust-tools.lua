@@ -1,4 +1,6 @@
 -- Tools for better development in Rust using Neovim's built-in LSP
+--
+-- XXX-TODO(vvv): Switch to https://github.com/mrcjkb/rustaceanvim
 
 return {
   'simrat39/rust-tools.nvim',

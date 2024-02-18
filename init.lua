@@ -181,7 +181,7 @@ require('lazy').setup({
 
         -- Toggles
         map('n', '<leader>tb', gs.toggle_current_line_blame, { desc = 'toggle git blame line' })
-        map('n', '<leader>td', gs.toggle_deleted, { desc = 'toggle git show deleted' })
+        map('n', '<leader>tD', gs.toggle_deleted, { desc = 'toggle git show deleted' })
 
         -- Text object
         map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = 'select git hunk' })
@@ -340,6 +340,8 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('n', '<leader>tn', ':lua vim.wo.number = not vim.wo.number<CR>',
   { desc = 'Toggle line numbering', silent = true })
 
+vim.keymap.set('n', '<leader>dw', ':%s/\\s\\+$//<CR>', { desc = 'Delete trailing whitespace' })
+
 -- XXX <<<<<<<
 -- XXX-TODO: Print information message in the status line (or however it is called).
 -- See also https://github.com/LazyVim/LazyVim/blob/a184fc1c732e16b10ed0bb19f8e9789b2b20b71a/lua/lazyvim/util/init.lua#L203-L213
@@ -348,9 +350,11 @@ local diagnostics_enabled = true
 
 function _G.toggle_diagnostics()
   if diagnostics_enabled then
-    vim.diagnostic.disable(0)
+    -- vim.diagnostic.disable(0) -- in the current buffer
+    vim.diagnostic.disable()
   else
-    vim.diagnostic.enable(0)
+    --XXX vim.diagnostic.enable(0) -- in the current buffer
+    vim.diagnostic.enable()
   end
   diagnostics_enabled = not diagnostics_enabled
 end
