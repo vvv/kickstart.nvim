@@ -211,8 +211,9 @@ require('lazy').setup({
         -- or set it to a string, for example "<leader>ts"
         toggle_style_key = '<leader>ts',
         -- List of styles to toggle between.
-        toggle_style_list = {'light', 'dark'},
+        toggle_style_list = {'dark', 'light'},
       }
+      --XXX vim.o.background = 'dark' -- HACK(vvv): Enforce dark background.
       require('onedark').load()
       vim.cmd.colorscheme 'onedark'
     end,
