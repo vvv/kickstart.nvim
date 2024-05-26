@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -99,7 +99,7 @@ vim.g.have_nerd_font = false
 --  For more options, you can see `:help option-list`
 
 -- Make line numbers default
-vim.opt.number = true
+-- vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
 -- vim.opt.relativenumber = true
@@ -148,11 +148,11 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = 'split'
 
--- Show which line your cursor is on
-vim.opt.cursorline = true
+--XXX -- Show which line your cursor is on
+--XXX vim.opt.cursorline = true
 
--- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 10
+--XXX -- Minimal number of screen lines to keep above and below the cursor.
+--XXX vim.opt.scrolloff = 10
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -640,16 +640,16 @@ require('lazy').setup({
     },
     opts = {
       notify_on_error = false,
-      format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
-        return {
-          timeout_ms = 500,
-          lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
-        }
-      end,
+      --XXX format_on_save = function(bufnr)
+      --XXX   -- Disable "format_on_save lsp_fallback" for languages that don't
+      --XXX   -- have a well standardized coding style. You can add additional
+      --XXX   -- languages here or re-enable it for the disabled ones.
+      --XXX   local disable_filetypes = { c = true, cpp = true }
+      --XXX   return {
+      --XXX     timeout_ms = 500,
+      --XXX     lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
+      --XXX   }
+      --XXX end,
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
@@ -778,17 +778,26 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
+
+    -- Theme inspired by Atom
+    'navarasu/onedark.nvim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     init = function()
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'onedark'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
     end,
+    opts = {
+      -- Keybind to toggle theme style. Leave it `nil` to disable it,
+      -- or set it to a string, for example "<leader>ts"
+      toggle_style_key = '<leader>ts',
+      -- List of styles to toggle between.
+      toggle_style_list = { 'dark', 'light' },
+    },
   },
 
   -- Highlight todo, notes, etc in comments
@@ -812,20 +821,20 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
+      --XXX -- Simple and easy statusline.
+      --XXX --  You could remove this setup call if you don't like it,
+      --XXX --  and try some other statusline plugin
+      --XXX local statusline = require 'mini.statusline'
+      --XXX -- set use_icons to true if you have a Nerd Font
+      --XXX statusline.setup { use_icons = vim.g.have_nerd_font }
 
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
+      --XXX -- You can configure sections in the statusline by overriding their
+      --XXX -- default behavior. For example, here we set the section for
+      --XXX -- cursor location to LINE:COLUMN
+      --XXX ---@diagnostic disable-next-line: duplicate-set-field
+      --XXX statusline.section_location = function()
+      --XXX   return '%2l:%-2v'
+      --XXX end
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
@@ -876,8 +885,8 @@ require('lazy').setup({
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
@@ -885,7 +894,7 @@ require('lazy').setup({
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
