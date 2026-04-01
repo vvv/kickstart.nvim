@@ -4,7 +4,7 @@
 
 return {
   'mrcjkb/rustaceanvim',
-  version = '^6',
+  version = '^8',
   lazy = false, -- this plugin is already lazy
 
   config = function()
