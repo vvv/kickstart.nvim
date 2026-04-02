@@ -84,10 +84,6 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
--- XXX-HACK: This is a workaround for a syntax highlight flicker bug in the `nvim-treesitter` plugin.
--- See https://github.com/neovim/neovim/issues/32660#issuecomment-2692738191
-vim.g._ts_force_sync_parsing = true
-
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
