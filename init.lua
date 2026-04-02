@@ -915,6 +915,9 @@ require('lazy').setup({
     config = function()
       -- ensure basic parser are installed
       local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+      -- NOTE: If this line fails, you may need to:
+      -- 1. `:TSUninstall lua` -- let Neovim 0.12.0 use its bundled Lua parser
+      -- 2. `brew install tree-sitter-cli` -- the tree-sitter formula is library-only; the CLI is a separate package
       require('nvim-treesitter').install(parsers)
 
       ---@param buf integer
