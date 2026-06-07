@@ -206,6 +206,10 @@ vim.keymap.set('n', '<leader>tn', ':lua vim.wo.number = not vim.wo.number<CR>', 
 vim.keymap.set('n', '<leader>td', function()
   vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 end, { desc = 'Toggle [D]iagnostics' })
+vim.keymap.set('n', '<leader>yp', function()
+  vim.fn.setreg('+', vim.fn.expand '%:.')
+  vim.notify('Copied: ' .. vim.fn.expand '%:.')
+end, { desc = '[Y]ank file [P]ath to clipboard' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
