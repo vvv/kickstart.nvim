@@ -210,6 +210,20 @@ vim.keymap.set('n', '<leader>yp', function()
   vim.fn.setreg('+', vim.fn.expand '%:.')
   vim.notify('Copied: ' .. vim.fn.expand '%:.')
 end, { desc = '[Y]ank file [P]ath to clipboard' })
+vim.keymap.set({ 'n', 'v' }, '<leader>yP', function()
+  local path = vim.fn.expand '%:.'
+  local result
+  if vim.fn.mode() == 'n' then
+    result = path .. ':' .. vim.fn.line '.'
+  else
+    local s = vim.fn.getpos('v')[2]
+    local e = vim.fn.getpos('.')[2]
+    if s > e then s, e = e, s end
+    result = path .. ':' .. s .. (s ~= e and ('-' .. e) or '')
+  end
+  vim.fn.setreg('+', result)
+  vim.notify('Copied: ' .. result)
+end, { desc = '[Y]ank file [P]ath with line(s) to clipboard' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
